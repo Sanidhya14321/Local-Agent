@@ -1,0 +1,12 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "watch-vscode-extension",
+      "type": "shell",
+      "isBackground": true,
+      "command": "if [ -d \"${workspaceFolder}/ai-dev-system/vscode_extension\" ]; then cd \"${workspaceFolder}/ai-dev-system/vscode_extension\"; elif [ -d \"${workspaceFolder}/vscode_extension\" ]; then cd \"${workspaceFolder}/vscode_extension\"; else echo 'Could not find vscode_extension folder from workspace root.'; exit 1; fi; npm run watch",
+      "problemMatcher": ["$tsc-watch"]
+    }
+  ]
+}

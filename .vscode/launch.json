@@ -1,0 +1,35 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Extension (Isolated, Local Agent Workspace)",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": [
+        "--extensionDevelopmentPath=${workspaceFolder}/ai-dev-system/vscode_extension",
+        "--disable-extensions",
+        "--disable-extension",
+        "Continue.continue"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/ai-dev-system/vscode_extension/out/**/*.js"
+      ],
+      "preLaunchTask": "watch-vscode-extension"
+    },
+    {
+      "name": "Run Extension (Isolated, ai-dev-system Workspace)",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": [
+        "--extensionDevelopmentPath=${workspaceFolder}/vscode_extension",
+        "--disable-extensions",
+        "--disable-extension",
+        "Continue.continue"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/vscode_extension/out/**/*.js"
+      ],
+      "preLaunchTask": "watch-vscode-extension"
+    }
+  ]
+}

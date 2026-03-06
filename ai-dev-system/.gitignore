@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+.ai_dev_memory.json
+.ai_learning_memory/
+.pytest_cache/
+
+vscode_extension/node_modules/
+vscode_extension/out/
+frontend/next-app/node_modules/
+frontend/next-app/.next/

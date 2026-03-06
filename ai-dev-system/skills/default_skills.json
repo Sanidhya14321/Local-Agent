@@ -1,0 +1,67 @@
+[
+  {
+    "name": "create_nextjs_app",
+    "description": "Initialize a Next.js TypeScript app with component-driven structure.",
+    "steps": [
+      "Create app scaffold and tsconfig",
+      "Add layout and page structure",
+      "Configure environment-aware API client",
+      "Add reusable components and hooks"
+    ],
+    "dependencies": ["next", "react", "typescript", "tailwindcss"],
+    "files_generated": ["frontend/next-app/package.json", "frontend/next-app/pages/index.tsx"],
+    "code_templates": ["component_shell", "api_client_template"]
+  },
+  {
+    "name": "setup_fastapi_backend",
+    "description": "Create modular FastAPI backend with routes, schemas, and services.",
+    "steps": [
+      "Create app entrypoint",
+      "Add health and core routes",
+      "Define Pydantic schemas",
+      "Create service layer and dependency injection"
+    ],
+    "dependencies": ["fastapi", "pydantic", "uvicorn"],
+    "files_generated": ["backend/api/main.py", "backend/services/project_service.py"],
+    "code_templates": ["router_template", "service_template"]
+  },
+  {
+    "name": "add_authentication",
+    "description": "Add token-based authentication flow for backend and frontend.",
+    "steps": [
+      "Define auth schema and user model",
+      "Add login/register endpoints",
+      "Implement token issue and verification",
+      "Add frontend auth state handling"
+    ],
+    "dependencies": ["pyjwt", "passlib", "next"],
+    "files_generated": ["backend/api/routes/auth.py", "frontend/next-app/hooks/useAuth.ts"],
+    "code_templates": ["jwt_auth_template"]
+  },
+  {
+    "name": "add_database",
+    "description": "Integrate database access with migration-ready structure.",
+    "steps": [
+      "Configure database URL in env",
+      "Create connection/session module",
+      "Create repository layer",
+      "Add migration scaffolding"
+    ],
+    "dependencies": ["sqlalchemy", "alembic"],
+    "files_generated": ["backend/services/db.py", "backend/services/repositories/base.py"],
+    "code_templates": ["db_session_template"]
+  },
+  {
+    "name": "create_rest_api",
+    "description": "Implement REST resources with schema validation and service abstraction.",
+    "steps": [
+      "Define domain schemas",
+      "Create CRUD service methods",
+      "Add route handlers",
+      "Add tests for endpoints"
+    ],
+    "dependencies": ["fastapi", "pytest"],
+    "files_generated": ["backend/api/routes/resource.py", "tests/test_resource_api.py"],
+    "code_templates": ["crud_router_template"]
+  }
+]

@@ -1,0 +1,66 @@
+{
+  "name": "ai-dev-system-local",
+  "displayName": "AI Dev System Local",
+  "description": "Local autonomous coding system powered by Ollama via MCP server",
+  "version": "0.1.0",
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": [
+    "onCommand:aiDevSystem.openPanel",
+    "onCommand:aiDevSystem.runTask",
+    "onCommand:aiDevSystem.showDiagnostics"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "aiDevSystem.openPanel",
+        "title": "AI Dev System: Open Panel"
+      },
+      {
+        "command": "aiDevSystem.runTask",
+        "title": "AI Dev System: Run Task"
+      },
+      {
+        "command": "aiDevSystem.showDiagnostics",
+        "title": "AI Dev System: Show Diagnostics"
+      }
+    ],
+    "configuration": {
+      "title": "AI Dev System",
+      "properties": {
+        "aiDevSystem.serverUrl": {
+          "type": "string",
+          "default": "http://127.0.0.1:8765",
+          "description": "Base URL of local MCP server"
+        },
+        "aiDevSystem.pollIntervalMs": {
+          "type": "number",
+          "default": 1500,
+          "description": "Polling interval for workflow updates"
+        },
+        "aiDevSystem.requestTimeoutMs": {
+          "type": "number",
+          "default": 20000,
+          "description": "HTTP timeout for MCP requests in milliseconds"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.24",
+    "@types/vscode": "^1.96.0",
+    "@types/ws": "^8.5.14",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "ws": "^8.18.2"
+  }
+}
