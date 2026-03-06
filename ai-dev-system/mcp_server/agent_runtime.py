@@ -43,6 +43,7 @@ class AgentRuntime:
         )
         self.records: dict[str, RunRecord] = {}
         self.subscribers: dict[str, list[asyncio.Queue[dict]]] = {}
+        self.tasks: dict[str, asyncio.Task[None]] = {}
         self.max_log_payload_entries = 80
 
     def create_run(self, task: str) -> RunRecord:
@@ -58,9 +59,18 @@ class AgentRuntime:
             updated = await self.loop_controller.run(record, progress_callback=self._emit_update)
             self.records[run_id] = updated
             await self._emit_update(updated)
+        except asyncio.CancelledError:
+            if record.status not in {RunStatus.success, RunStatus.failed}:
+                record.status = RunStatus.failed
+                record.last_error = "Run cancelled by user"
+                record.logs.append("Workflow cancelled by user.")
+                self.records[run_id] = record
+                await self._emit_update(record)
+            raise
         except Exception as exc:
             record.status = RunStatus.failed
-            record.last_error = f"Unhandled runtime error: {exc}"
+            detail = str(exc).strip() or repr(exc)
+            record.last_error = f"Unhandled runtime error ({type(exc).__name__}): {detail}"
             record.logs.append("Workflow crashed before completion.")
             self.records[run_id] = record
             await self._emit_update(record)
@@ -70,12 +80,33 @@ class AgentRuntime:
                 await heartbeat_task
             except asyncio.CancelledError:
                 pass
+            self.tasks.pop(run_id, None)
 
     def run_async(self, task: str) -> RunRecord:
         record = self.create_run(task)
         self.subscribers.setdefault(record.run_id, [])
-        asyncio.create_task(self.execute(record.run_id))
+        self.tasks[record.run_id] = asyncio.create_task(self.execute(record.run_id))
         return record
+
+    async def cancel_run(self, run_id: str) -> tuple[bool, str]:
+        record = self.records.get(run_id)
+        if not record:
+            return False, "run_id not found"
+
+        if record.status in {RunStatus.success, RunStatus.failed}:
+            return False, f"run already terminal ({record.status.value})"
+
+        task = self.tasks.get(run_id)
+        if task and not task.done():
+            task.cancel()
+            return True, "cancellation requested"
+
+        record.status = RunStatus.failed
+        record.last_error = "Run cancelled by user"
+        record.logs.append("Workflow cancelled by user.")
+        self.records[run_id] = record
+        await self._emit_update(record)
+        return True, "cancelled"
 
     def get_run(self, run_id: str) -> RunRecord | None:
         return self.records.get(run_id)

@@ -95,6 +95,14 @@ async def get_workflow(run_id: str) -> dict:
     return runtime.serialize_record(record)
 
 
+@app.post("/workflow/{run_id}/cancel")
+async def cancel_workflow(run_id: str) -> dict:
+    ok, message = await runtime.cancel_run(run_id)
+    if not ok:
+        raise HTTPException(status_code=400, detail=message)
+    return {"run_id": run_id, "status": "cancellation_requested", "message": message}
+
+
 @app.websocket("/workflow/{run_id}/stream")
 async def stream_workflow(websocket: WebSocket, run_id: str) -> None:
     await websocket.accept()

@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     workspace_root: str = Field(default=".", alias="WORKSPACE_ROOT")
     max_agent_loops: int = Field(default=8, alias="MAX_AGENT_LOOPS")
     request_timeout_seconds: int = Field(default=180, alias="REQUEST_TIMEOUT_SECONDS")
+    llm_call_timeout_seconds: int = Field(default=180, alias="LLM_CALL_TIMEOUT_SECONDS")
     enable_rich_logs: bool = Field(default=True, alias="ENABLE_RICH_LOGS")
     chroma_persist_dir: str = Field(default=".ai_learning_memory", alias="CHROMA_PERSIST_DIR")
     embedding_model_name: str = Field(
